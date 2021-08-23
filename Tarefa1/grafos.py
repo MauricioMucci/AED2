@@ -1,4 +1,4 @@
-import os
+from os import system
 
 # ------------------------------------------------------------------------------------------------------------------------------------------
 # Classe que constroi o grafo por matriz de adjacencia
@@ -56,7 +56,7 @@ def main():
     escolha = 0
 
     while(True):
-        os.system("clear")
+        system("clear")
         print("\t [Menu Principal]")
         print("1. Inserir as arestas e seus respectivos pesos")
         print("2. Imprimir matriz de adjacencia")
@@ -64,7 +64,7 @@ def main():
         escolha = int(input("Opcao: "))
 
         if escolha == 1:
-            os.system("clear")
+            system("clear")
 
             vertice1 = int(
                 input(f"Qual o ponto de partida?(1 - {num_de_vertices})\nR: "))
@@ -84,13 +84,13 @@ def main():
 
             meuGrafo.add_aresta(vertice1, vertice2, peso)
         elif escolha == 2:
-            os.system("clear")
+            system("clear")
 
             meuGrafo.print_matriz_adjacencia()
 
             pause()
         elif escolha == 3:
-            os.system("clear")
+            system("clear")
             break
         else:
             print("\t [Tente Novamente]")
