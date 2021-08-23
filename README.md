@@ -1,5 +1,6 @@
 # __AED2__
 ### _Repositório da disciplina Algoritmos e Estruturas de Dados II_
+#### _Contem os exercicios de todas as listas realizadas em 2021/2_
 
 ### Conteudos 📚
 
