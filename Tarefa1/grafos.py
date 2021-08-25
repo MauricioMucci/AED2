@@ -56,7 +56,7 @@ def main():
     escolha = 0
 
     while(True):
-        system("clear")
+        system("clear" or "cls")
         print("\t [Menu Principal]")
         print("1. Inserir as arestas e seus respectivos pesos")
         print("2. Imprimir matriz de adjacencia")
@@ -64,7 +64,7 @@ def main():
         escolha = int(input("Opcao: "))
 
         if escolha == 1:
-            system("clear")
+            system("clear" or "cls")
 
             vertice1 = int(
                 input(f"Qual o ponto de partida?(1 - {num_de_vertices})\nR: "))
@@ -84,13 +84,13 @@ def main():
 
             meuGrafo.add_aresta(vertice1, vertice2, peso)
         elif escolha == 2:
-            system("clear")
+            system("clear" or "cls")
 
             meuGrafo.print_matriz_adjacencia()
 
             pause()
         elif escolha == 3:
-            system("clear")
+            system("clear" or "cls")
             break
         else:
             print("\t [Tente Novamente]")
