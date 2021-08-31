@@ -176,9 +176,8 @@ def main():
             resultado = meuGrafo.dijkstra(origem)
             print(
                 f"\nCaminho Minimo da Origem ate o Destino: {resultado[destino - 1]}")
-            print(
-                f"\nCaminho Minimo da Origem a todos os Destinos: {resultado}")
 
+            print(f"\nCaminho Minimo da Origem a todos os Destinos: ", end="")
             for i in resultado:
                 print(i, end=" ")
 
