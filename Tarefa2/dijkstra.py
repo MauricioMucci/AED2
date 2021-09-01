@@ -2,63 +2,6 @@ from os import system
 
 
 # ------------------------------------------------------------------------------------------------------------------------------------------
-# Classe que constroi a arvore minima
-
-class ArvoreMinima:
-
-    def __init__(self):
-        self.nos = 0
-        self.buff = []
-
-    def adiciona_no(self, vertice, peso):
-        self.buff.append([vertice, peso])
-        self.nos += 1
-
-        noFilho = self.nos
-
-        while True:
-            if noFilho == 1:
-                break
-            noPai = noFilho // 2
-            if self.buff[noPai - 1][0] <= self.buff[noFilho - 1][0]:
-                break
-            else:
-                self.buff[noPai - 1], self.buff[noFilho - 1] = self.buff[noFilho -
-                                                                         1], self.buff[noPai - 1]
-                noFilho = noPai
-
-    def remove_no(self):
-        primeiroElemento = self.buff[0]
-        self.buff[0] = self.buff[self.nos - 1]
-
-        self.buff.pop()
-        self.nos -= 1
-
-        noPai = 1
-        while True:
-            noFilho = 2 * noPai          # Filho a esquerda
-            if noFilho > self.nos:
-                break
-            if noFilho + 1 <= self.nos:  # Filho a direita
-                if self.buff[noFilho][0] < self.buff[noFilho - 1][0]:
-                    noFilho += 1
-            if self.buff[noPai - 1][0] <= self.buff[noFilho - 1][0]:
-                break
-            else:
-                self.buff[noPai - 1], self.buff[noFilho - 1] = self.buff[noFilho -
-                                                                         1], self.buff[noPai - 1]
-                noPai = noFilho
-
-        return primeiroElemento
-
-    def mostra_no(self):
-        print(self.buff)
-
-    def tamanho_buff(self):
-        return self.nos
-
-
-# ------------------------------------------------------------------------------------------------------------------------------------------
 # Classe que constroi o grafo por matriz de adjacencia
 
 
@@ -88,24 +31,55 @@ class GrafoMatriz:
                 print(f"\t{self.grafo[i][j]}", end="")
             print()
 
-    def dijkstra(self, origem):
-        caminhoMinimo = [["Origem", "Infinito"] for _ in range(self.vertices)]
-        caminhoMinimo[origem - 1] = [origem, 0]
+    def dijkstra(self, origem, destino):
+        custo = [[0] * self.vertices for _ in range(self.vertices)]
+        dist, vis, pred = [0 for _ in range(self.vertices)], [
+            0 for _ in range(self.vertices)], [0 for _ in range(self.vertices)]
 
-        lista = ArvoreMinima()
-        lista.adiciona_no(origem, 0)
+        for i in range(self.vertices):
+            for j in range(self.vertices):
+                if self.grafo[i][j] == None:
+                    custo[i][j] = 9999
+                else:
+                    custo[i][j] = self.grafo[i][j]
 
-        while lista.tamanho_buff() > 0:
-            vertice, peso = lista.remove_no()
+        for i in range(self.vertices):
+            dist[i] = custo[origem][i]
+            pred[i] = origem
+
+        dist[origem] = 0
+        vis[origem] = 1
+        count = 1
+        nextNo = 0
+
+        while(count < self.vertices - 1):
+            minDis = 9999
+
             for i in range(self.vertices):
-                if self.grafo[vertice - 1][i] != None:
-                    if caminhoMinimo[i][1] == "Infinito" or caminhoMinimo[i][1] > peso + self.grafo[vertice - 1][i]:
-                        caminhoMinimo[i] = [
-                            vertice, peso + self.grafo[vertice - 1][i]]
-                        lista.adiciona_no(
-                            i + 1, peso + self.grafo[vertice - 1][i])
+                if dist[i] < minDis and vis[i] == 0:
+                    minDis = dist[i]
+                    nextNo = i
 
-        return caminhoMinimo
+            vis[nextNo] = 1
+
+            for i in range(self.vertices):
+                if vis[i] == 0:
+                    if minDis + custo[nextNo][i] < dist[i]:
+                        dist[i] = minDis + custo[nextNo][i]
+                        pred[i] = nextNo
+            count += 1
+
+        for i in range(self.vertices):
+            if i != origem and i == destino:
+                print(
+                    f"O caminho ate vertice {i + 1} tem um peso de {dist[i]}")
+                print(f"O caminho e: {i + 1}", end=" ")
+                j = i
+                j = pred[j]
+                print(f"<- {j + 1}", end=" ")
+                while j != origem:
+                    j = pred[j]
+                    print(f"<- {j + 1}", end=" ")
 
 
 # ------------------------------------------------------------------------------------------------------------------------------------------
@@ -168,18 +142,12 @@ def main():
                 print("\n\t [ Valor invalido - Tente Novamente ]")
                 origem = int(input("\nDigite a origem: "))
 
-            destino = int(input("\nDigite o destino: "))
-            while destino < 1 or destino > num_de_vertices:
+            destino = int(input("\nDigite a destino: "))
+            while destino < 1 or destino > num_de_vertices or destino == origem:
                 print("\n\t [ Valor invalido - Tente Novamente ]")
-                destino = int(input("\nDigite o destino: "))
+                destino = int(input("\nDigite a destino: "))
 
-            resultado = meuGrafo.dijkstra(origem)
-            print(
-                f"\nCaminho Minimo da Origem ate o Destino: {resultado[destino - 1]}")
-
-            print(f"\nCaminho Minimo da Origem a todos os Destinos: ", end="")
-            for i in resultado:
-                print(i, end=" ")
+            meuGrafo.dijkstra(origem - 1, destino - 1)
 
             pause()
         elif escolha == 3:
